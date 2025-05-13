@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphic Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle at top, #1e1e2f, #0d0d1a);
+        }
+        .container {
+            width: 380px;
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            margin: auto;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        #uploadPhoto {
+            display: none;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .btn {
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .remove-btn {
+            color: red;
+        }
+        h2 {
+            margin: 15px 0;
+            color: #ffffff;
+            font-size: 24px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            transition: 0.3s;
+        }
+        .login-btn:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+        }
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 14px;
+            color: white;
+        }
+        .links a {
+            color: white;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .register {
+            margin-top: 15px;
+            font-size: 14px;
+            color: white;
+        }
+        .register a {
+            color: rgba(255, 98, 0, 0.938);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .register a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <label for="uploadPhoto">
+            <div class="avatar">
+                <img id="profilePic" src="" alt="Profile Picture">
+            </div>
+        </label>
+        <input type="file" id="uploadPhoto" accept="image/*">
+
+        <div class="btn-group">
+            <span class="btn upload-btn">Upload Photo</span>
+            <span class="btn remove-btn" id="removePhoto">Remove Photo</span>
+        </div>
+
+        <h2>Login Here</h2>
+        <form id="loginForm" enctype="multipart/form-data">
+            <input type="email" id="loginEmail" class="input-field" placeholder="Email ID" required>
+            <input type="password" id="loginPassword" class="input-field" placeholder="Password" required>
+            <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+
+        <div class="links">
+            <label><input type="checkbox" id="rememberMe"> Remember me</label>
+            <a href="ForgotPassword.html" style="color: rgba(255, 98, 0, 0.938);">Forgot Password?</a>
+        </div>
+        <p class="register">Don't have an account? <a href="register.html">Register</a></p>
+    </div>
+    <script>
+        document.querySelector(".upload-btn").onclick = () => {
+            document.getElementById("uploadPhoto").click();
+        };
+
+        document.getElementById("uploadPhoto").onchange = function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("profilePic").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        document.getElementById("removePhoto").onclick = function () {
+            document.getElementById("profilePic").src = "";
+            document.getElementById("uploadPhoto").value = "";
+        };
+
+        document.getElementById("loginForm").onsubmit = function (e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append("email", document.getElementById("loginEmail").value.trim());
+            formData.append("password", document.getElementById("loginPassword").value.trim());
+
+            const photo = document.getElementById("uploadPhoto").files[0];
+            if (photo) {
+                formData.append("photo", photo);
+            }
+
+            fetch("http://localhost/MAJOR/Interia/login.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(raw => {
+                try {
+                    const data = JSON.parse(raw);
+                    if (data.status === "success") {
+                        // Store in sessionStorage
+                        sessionStorage.setItem("username", data.username);
+                        sessionStorage.setItem("email", data.email);
+                        sessionStorage.setItem("photo", data.photo || "");
+
+                        alert("Login successful!");
+                        window.location.href = "index.php";
+                    } else {
+                        alert("Error: " + raw);
+                    }
+                } catch {
+                    alert("Login failed: " + raw);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred during login.");
+            });
+        };
+    </script>
+</body>
+</html>

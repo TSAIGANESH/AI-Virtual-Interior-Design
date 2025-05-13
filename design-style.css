@@ -1,0 +1,55 @@
+.banner {
+    height: 75vh;
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(source/design-background.jpg);
+}
+
+.content {
+    top: 40%;
+}
+
+.m1 {
+    padding: 50px;
+}
+
+.t1 {
+    width: 100%;
+    text-align: center;
+}
+
+.t1 p {
+    font-size: 27px;
+    line-height: 1.5;
+}
+
+.d1 {
+    margin: 50px 0 0 0;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.d1 div {
+    width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    background-color: #fff;
+    text-align: center;
+}
+
+.d1 div img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s;
+}
+
+.d1 div:hover img {
+    transform: scale(1.05);
+}
+
+.d1 div h2 {
+    margin: 10px 0;
+    font-size: 35px;
+}
